@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: MavenWeb
+Bundle-SymbolicName: MavenWeb
+Bundle-Version: 1.0.0.qualifier
+Export-Package: cn.pq,
+ cn.pq.com,
+ cn.pq.com.quartz,
+ cn.pq.task,
+ cn.pq.task.abs

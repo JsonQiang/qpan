@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+  xmlns:task="http://www.springframework.org/schema/task"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+            http://www.springframework.org/schema/context
+            http://www.springframework.org/schema/context/spring-context-3.2.xsd
+            http://www.springframework.org/schema/task
+            http://www.springframework.org/schema/task/spring-task-3.2.xsd">
+            
+            <context:annotation-config/>
+
+            <!-- jobdetail -->
+            <bean id="myTask1" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+            	<property name="jobClass" value="cn.pq.task.MyTask" />
+                <property name="durability" value="true" />
+            </bean>
+            <bean id="myTask2" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+            	<property name="jobClass" value="cn.pq.task.FridayTask" />
+                <property name="durability" value="true" />
+            </bean>
+            <!-- jobtrigger -->
+             <bean id="myTrigger1" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
+		        <property name="jobDetail" ref="myTask1" />  
+		        <property name="cronExpression">
+		            <value>0 */1 * * * ? *</value>  
+		        </property>  
+		    </bean>  
+             <bean id="myTrigger2" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
+		        <property name="jobDetail" ref="myTask2" />  
+		        <property name="cronExpression">
+		            <value>0 */1 * * * ? *</value>  
+		        </property>  
+		    </bean>  
+            <!-- schedulerfactory -->
+            
+              <!-- 基础调度工厂，所有scheduler集成该调度器 -->
+		  <bean id="baseQuartzScheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		    <property name="configLocation" value="classpath:quartz.properties" />
+		    <!-- 基础工厂默认名称，子调度器可覆盖 -->
+		    <property name="schedulerName" value="myScheduler" />
+		
+		   <property name="autoStartup" value="true"></property>
+		    <!-- 允许修改数据库配置新的job -->
+		    <property name="overwriteExistingJobs" value="true" />
+		    <property name="applicationContextSchedulerContextKey" value="applicationContext" />
+		    <!-- job工厂 -->
+<!-- 		    <property name="jobFactory">
+		      <bean class="cn.pq.com.quartz.AutowiringSpringBeanJobFactory" />
+		    </property> -->
+		    <!-- 放在子schedule里配置 -->
+		    
+		    <property name="jobDetails">
+		      <list>
+		       <ref bean="myTask1"/>
+		       <ref bean="myTask2"/>
+		      </list>
+		    </property>
+		    <property name="triggers">
+		      <list>
+		       <ref bean="myTrigger1"/>
+		       <ref bean="myTrigger2"/>
+		      </list>
+		    </property>
+		   
+		  </bean>
+		  </beans>
