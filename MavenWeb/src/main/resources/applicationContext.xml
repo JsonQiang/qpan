@@ -20,6 +20,7 @@
 </bean>  
 	<import resource="classpath:spring-quartz.xml" />
 	<import resource="classpath:application_db.xml"/>
+	<import resource="classpath:activiti.cfg.xml"/>
 	<context:annotation-config />
     <context:component-scan base-package="cn.pq">
         <!--<context:exclude-filter expression=".*_Roo_.*" type="regex"/>-->
